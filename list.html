@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="box">
+            <h1>任务列表</h1>
+            <p>任务总数：{{obj.length}}；还有：{{surplus()}} 未完成；【 <span @click="del()">完成</span> 】</p>
+            <ul>
+                <li v-for="(v,i) in obj">
+                    <input type="checkbox" v-model="v.style">
+                    <span v-if="v.edit" @click="edit(i)">{{v.title}}</span>
+                    <input type="text" v-model=v.title v-else @blur="edit(i)">
+                </li>
+            </ul>
+            <input type="text" v-model="inputText"><button @click="add()">添加</button>
+    </div>
+    
+</body>
+</html>
+<script src="node_modules/vue/dist/vue.min.js"></script>
+<script>
+new Vue({
+    el:"#box",
+    data:{
+        obj: [
+            {title:"设置", edit:true, style:false},
+            {title:"111",edit:true, style:false},
+            {title:"222",edit:true, style:false},
+            {title:"333",edit:true,style:false}
+            ],
+            inputText:""
+        
+    },
+    methods:{
+    add(){
+        this.obj.push({title:this.inputText,edit:true,})
+    },
+    edit(i){
+        if(this.obj[i].style){
+            return
+        }else{
+            this.obj[i].edit=! this.obj[i].edit
+        }
+    },
+    surplus(){
+        var i=0;
+       this.obj.forEach(function(v){
+           if(v.style==false){
+               i++
+           }
+       })
+       return i
+    },
+    del(){
+        var newObj=this.obj;
+        this.obj=[]
+        for(var i=0;i<newObj.length;i++){
+            if(newObj[i].style==false){
+                this.obj.push(newObj[i])
+            }
+        }
+    }
+    }
+})
+</script>
